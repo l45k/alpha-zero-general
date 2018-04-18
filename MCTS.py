@@ -32,18 +32,17 @@ class MCTS():
             self.search(canonicalBoard)
 
         s = self.game.stringRepresentation(canonicalBoard)
-        counts = [self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.getActionSize())]
+        counts = [self.Nsa[(s, a)] if (s, a) in self.Nsa else 0 for a in range(self.game.getActionSize())]
 
-        if temp==0:
+        if temp == 0:
             bestA = np.argmax(counts)
             probs = [0]*len(counts)
-            probs[bestA]=1
+            probs[bestA] = 1
             return probs
 
         counts = [x**(1./temp) for x in counts]
         probs = [x/float(sum(counts)) for x in counts]
         return probs
-
 
     def search(self, canonicalBoard):
         """
@@ -69,7 +68,7 @@ class MCTS():
 
         if s not in self.Es:
             self.Es[s] = self.game.getGameEnded(canonicalBoard, 1)
-        if self.Es[s]!=0:
+        if self.Es[s] != 0:
             # terminal node
             return -self.Es[s]
 

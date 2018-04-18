@@ -8,14 +8,14 @@ sys.path.append('..')
 class CubicupNNet:
     def __init__(self, game, args):
         # game params
-        self.board_x, self.board_y = game.getBoardSize()
+        self.board_x, self.board_y, self.board_z = game.getBoardSize()
         self.action_size = game.getActionSize()
         self.args = args
 
         # Neural Net
-        self.input_boards = Input(shape=(self.board_x, self.board_y))    # s: batch_size x board_x x board_y
+        self.input_boards = Input(shape=(self.board_x, self.board_y, self.board_z))    # s: batch_size x board_x x board_y
 
-        x_image = Reshape((self.board_x, self.board_y, 1))(self.input_boards)
+        x_image = Reshape((self.board_x, self.board_y, self.board_z, 1))(self.input_boards)
         # batch_size  x board_x x board_y x 1
         h_conv1 = Activation('relu')(BatchNormalization(axis=3)(Conv3D(args.num_channels, 3, padding='same')(x_image)))
         # batch_size  x board_x x board_y x num_channels

@@ -1,6 +1,6 @@
 from Coach import Coach
-from othello.OthelloGame import OthelloGame as Game
-from othello.pytorch.NNet import NNetWrapper as nn
+from cubicup.CubicupGame import CubicupGame as Game
+from cubicup.keras.NNet import NNetWrapper as nn
 from utils import *
 
 args = dotdict({
@@ -21,7 +21,7 @@ args = dotdict({
 })
 
 if __name__=="__main__":
-    g = Game(6)
+    g = Game(4)
     nnet = nn(g)
 
     if args.load_model:

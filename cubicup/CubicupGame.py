@@ -2,7 +2,6 @@ from __future__ import print_function
 import sys
 from Game import Game
 from CubicupLogic import Board
-# import numpy as np
 sys.path.append('..')
 
 
@@ -22,7 +21,7 @@ class CubicupGame(Game):
 
     def getActionSize(self):
         # return number of actions
-        return self.board.playable.count()
+        return self.board.get_move_size()
 
     def getNextState(self, board, player, action):
         # if player takes action on board, return next (board,player)
@@ -35,13 +34,19 @@ class CubicupGame(Game):
 
     def getValidMoves(self, board, player):
         # return a fixed size binary vector
-        return self.board.playable
+        return self.board.get_legal_moves(player)
 
     def getGameEnded(self, board, player):
         # return 0 if not ended, 1 if player 1 won, -1 if player 1 lost
         if not self.board.get_legal_moves(player) and not self.board.get_legal_moves(-player):
-            return 0
-        return -1
+            if not self.getGameDraw():
+                return self.board.get_board()[(0, 0, 0)]
+            else:
+                return -1
+        return 0
+
+    def getGameDraw(self):
+        return self.board.is_draw();
 
     def getCanonicalForm(self, board, player):
         # return state if player==1, else return -state if player==-1
