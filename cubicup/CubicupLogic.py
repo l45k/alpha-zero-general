@@ -24,35 +24,49 @@ class Board:
 
         # Create the empty board array.
         self.board = np.zeros((self.n,) * 3, dtype=int)
-        self.playable = []
+        self.playable = self.get_playable()
 
         # create the playable positions
-        for a in range(self.n):
-            for b in range(self.n):
-                for c in range(self.n):
-                    if a+b+c == self.n-1:
-                        self.playable.append((a, b, c))
-        self.played = []
+        #for a in range(self.n):
+        #    for b in range(self.n):
+        #        for c in range(self.n):
+        #            if a+b+c == self.n-1:
+        #                self.playable.append((a, b, c))
+
         self.moves_pp = n*(n+1.)*(n+2.)/12.
         self.moves = self.moves_pp * 2.
-        self.draw = 0
 
     # add [][] indexer syntax to the Board
     def __getitem__(self, index): 
         return self.board[index]
 
+    def set_board(self, board):
+        self.board = board
+        self.playable = self.get_playable()
+
+    def get_playable(self):
+        playable = []
+        for a in range(self.n):
+            for b in range(self.n):
+                for c in range(self.n):
+                    if self.board[(a, b, c)] == 0:
+                        if a+b+c >= self.n:
+                            continue
+                        if a+b+c == self.n-1:
+                            playable.append((a, b, c))
+                        elif self._supported((a, b, c)) == 1:
+                            playable.append((a, b, c))
+        return playable
+
     def get_move_count(self):
         """ Number of possible moves"""
         return self.moves
 
-    def count_diff(self, color):
+    @staticmethod
+    def count_diff(board):
         """Counts the # pieces of the given color
         (1 for green, -1 for blue, 0 for empty spaces)"""
-        return np.sum(self.board)
-
-    def is_draw(self):
-        """Check if the game is a draw"""
-        return self.draw
+        return np.sum(board)
 
     def get_legal_moves(self, color):
         """Returns all the legal moves for the given color.
@@ -88,7 +102,7 @@ class Board:
 
         # check for cup
         for position in supports:
-            if self._supporting_color(position) == color and self.has_moves(-color):
+            if self.supporting_color(self.board, position) == color and self.has_moves(-color):
                 self.execute_move(tuple(position), -color)
                 # if it was the last possible move, the game is a draw
                 self.draw = 1
@@ -101,19 +115,16 @@ class Board:
         if self.playable.__contains__(move):
             self.playable.remove(move)
 
-        # Check if it really is a draw. Last step!
-        if self.draw and self.playable:
-            self.draw = 0
-
     def _supported(self, position):
         """ Checks if the position is supported """
         supports = position + self.__directions
         cubes = [self.board[tuple(x)] for x in supports]
         return not 0 in cubes
 
-    def _supporting_color(self, position):
+    @staticmethod
+    def supporting_color(board, position):
         """ Checks if the position is supported by only one color"""
-        supports = position + self._Board__directions
+        supports = position + Board.__directions
         cubes_tuple = [tuple(x) for x in supports]
-        cube_sum = sum([self.board[x] for x in cubes_tuple])
+        cube_sum = sum([board[x] for x in cubes_tuple])
         return (cube_sum == 3)*1 - (cube_sum == -3)*1

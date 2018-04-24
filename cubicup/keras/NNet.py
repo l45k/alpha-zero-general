@@ -21,7 +21,7 @@ args = dotdict({
 class NNetWrapper(NeuralNet):
     def __init__(self, game):
         self.nnet = cunet(game, args)
-        self.board_x, self.board_y = game.getBoardSize()
+        self.board_x, self.board_y, self.board_z = game.getBoardSize()
         self.action_size = game.getActionSize()
 
     def train(self, examples):
