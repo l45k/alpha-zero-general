@@ -28,6 +28,9 @@ class NNetWrapper(NeuralNet):
         """
         examples: list of examples, each example is of form (board, pi, v)
         """
+        #TODO
+        #input_boards, target_pis, target_vs = list(zip(*examples))
+        #ValueError: need more than 0 values to unpack
         input_boards, target_pis, target_vs = list(zip(*examples))
         input_boards = np.asarray(input_boards)
         target_pis = np.asarray(target_pis)

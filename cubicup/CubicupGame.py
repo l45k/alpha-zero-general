@@ -104,7 +104,7 @@ class CubicupGame(Game):
         #            newB = np.fliplr(newB)
         #            newPi = np.fliplr(newPi)
         #        l += [(newB, list(newPi.ravel()) + [pi[-1]])]
-        return []
+        return [(board, pi)]
 
     def stringRepresentation(self, board):
         # 8x8 numpy array (canonical board)

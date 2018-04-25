@@ -88,6 +88,7 @@ class MCTS():
                 print("All valid moves were masked, do workaround.")
                 self.Ps[s] = self.Ps[s] + valids
                 self.Ps[s] /= np.sum(self.Ps[s])
+                # TODO check here
 
             self.Vs[s] = valids
             self.Ns[s] = 0
