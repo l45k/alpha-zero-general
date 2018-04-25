@@ -34,14 +34,13 @@ class Board:
         #                self.playable.append((a, b, c))
 
         self.moves_pp = n*(n+1.)*(n+2.)/12.
-        self.moves = self.moves_pp * 2.
 
     # add [][] indexer syntax to the Board
     def __getitem__(self, index): 
         return self.board[index]
 
     def set_board(self, board):
-        self.board = board
+        self.board = np.array(board, copy=True)
         self.playable = self.get_playable()
 
     def get_playable(self):
@@ -57,10 +56,6 @@ class Board:
                         elif self._supported((a, b, c)) == 1:
                             playable.append((a, b, c))
         return playable
-
-    def get_move_count(self):
-        """ Number of possible moves"""
-        return self.moves
 
     @staticmethod
     def count_diff(board):

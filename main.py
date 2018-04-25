@@ -9,7 +9,7 @@ args = dotdict({
     'tempThreshold': 15,
     'updateThreshold': 0.6,
     'maxlenOfQueue': 200000,
-    'numMCTSSims': 35,
+    'numMCTSSims': 25,
     'arenaCompare': 40,
     'cpuct': 1,
 

@@ -68,12 +68,18 @@ class CubicupGame(Game):
         # create board
         b = Board(self.n)
         b.set_board(board)
-        if not b.get_legal_moves(player) and not b.get_legal_moves(-player):
-            if not self.getGameDraw(board):
+        # check draw
+        if not self.getGameDraw(board):
+            return -1
+        # check 1 has moves
+        if not b.get_legal_moves(1) or not b.get_legal_moves(-1):
+            # normal end?
+            if self.getScore(board, player) == 0:
                 return b.get_board()[(0, 0, 0)]
-            else:
-                return -1
+            # don't fill the board. will not be used. just return -1 * sign of number of more cubes
+            return -1 * np.sign(self.getScore(board, player))
         return 0
+
 
     def getGameDraw(self, board):
         """Check if the game is a draw"""
@@ -98,7 +104,7 @@ class CubicupGame(Game):
         #            newB = np.fliplr(newB)
         #            newPi = np.fliplr(newPi)
         #        l += [(newB, list(newPi.ravel()) + [pi[-1]])]
-        return
+        return []
 
     def stringRepresentation(self, board):
         # 8x8 numpy array (canonical board)
