@@ -99,10 +99,7 @@ class Coach():
             if len(self.trainExamplesHistory) > self.args.numItersForTrainExamplesHistory:
                 print("len(trainExamplesHistory) =", len(self.trainExamplesHistory), " => remove the oldest trainExamples")
                 self.trainExamplesHistory.pop(0)
-            # backup history to a file
-            # NB! the examples were collected using the model from the previous iteration, so (i-1)  
-            self.saveTrainExamples(i-1)
-            
+
             # shuffle examlpes before training
             trainExamples = []
             for e in self.trainExamplesHistory:
@@ -126,20 +123,34 @@ class Coach():
             if pwins+nwins > 0 and float(nwins)/(pwins+nwins) < self.args.updateThreshold:
                 print('REJECTING NEW MODEL')
                 self.nnet.load_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
+                # backup history to a file
+                # NB! the examples were collected using the model from the previous iteration, so (i-1)
+                self.saveTrainExamples()
             else:
                 print('ACCEPTING NEW MODEL')
                 self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=self.getCheckpointFile(i))
-                self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='best.pth.tar')                
+                self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='best.pth.tar')
+                # save examples
+                self.deleteTrainExamples()
+                self.trainExamplesHistory = []
 
     def getCheckpointFile(self, iteration):
         return 'checkpoint_' + str(iteration) + '.pth.tar'
 
-    def saveTrainExamples(self, iteration):
-        folder = self.args.checkpoint
+    def deleteTrainExamples(self):
+        modelFile = os.path.join(self.args.load_folder_file[0], self.args.load_folder_file[1])
+        examplesFile = modelFile + ".examples"
+        if os.path.isfile(examplesFile):
+            os.remove(examplesFile)
+
+    def saveTrainExamples(self):
+        modelFile = os.path.join(self.args.load_folder_file[0], self.args.load_folder_file[1])
+        examplesFile = modelFile + ".examples"
+        folder = self.args.load_folder_file[0]
         if not os.path.exists(folder):
             os.makedirs(folder)
-        filename = os.path.join(folder, self.getCheckpointFile(iteration)+".examples")
-        with open(filename, "wb+") as f:
+        # filename = os.path.join(folder + ".examples")
+        with open(examplesFile, "wb+") as f:
             Pickler(f).dump(self.trainExamplesHistory)
         f.closed
 
@@ -148,9 +159,9 @@ class Coach():
         examplesFile = modelFile+".examples"
         if not os.path.isfile(examplesFile):
             print(examplesFile)
-            r = input("File with trainExamples not found. Continue? [y|n]")
-            if r != "y":
-                sys.exit()
+            print("File with trainExamples not found.")# Continue? [y|n]")
+            # if r != "y":
+            #    sys.exit()
         else:
             print("File with trainExamples found. Read it.")
             with open(examplesFile, "rb") as f:

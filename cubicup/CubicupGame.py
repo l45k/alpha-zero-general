@@ -1,5 +1,8 @@
 from __future__ import print_function
 import sys
+
+from six import b
+
 from Game import Game
 from cubicup.CubicupLogic import Board
 import numpy as np
@@ -10,7 +13,6 @@ sys.path.append('..')
 class CubicupGame(Game):
     def __init__(self, n):
         self.n = n
-        self.player = 0
 
         directions = np.array([(1, 0, 0), (0, 1, 0), (0, 0, 1)])
 
@@ -18,6 +20,9 @@ class CubicupGame(Game):
         self.action_dict = {}  # 3d to number
         self.supporting_dict = {}  # supports
         self.supported_dict = {}  # supported by
+        self.rotation1 = np.zeros(self.getActionSize(), dtype=int)  # first rotation
+        self.rotation2 = np.zeros(self.getActionSize(), dtype=int)  # second rotation
+
         counter = 0
         # Create dict
         for a in range(self.n):
@@ -26,9 +31,19 @@ class CubicupGame(Game):
                     if a + b + c >= self.n:
                         continue
                     else:
-                        self.pos_dict[(a, b, c)] = counter
-                        self.action_dict[counter] = (a, b, c)
+                        self.pos_dict[(a, b, c)] = int(counter)
+                        self.action_dict[int(counter)] = (a, b, c)
                         counter += 1
+
+        # Create rotation
+        for a in range(self.n):
+            for b in range(self.n):
+                for c in range(self.n):
+                    if a + b + c >= self.n:
+                        continue
+                    else:
+                        self.rotation1[self.pos_dict[(a, b, c)]] = self.pos_dict[(b, c, a)]
+                        self.rotation2[self.pos_dict[(a, b, c)]] = self.pos_dict[(c, a, b)]
 
         for x in range(self.getActionSize()):
             pos = self.action_dict[x]
@@ -54,8 +69,6 @@ class CubicupGame(Game):
 
     def getNextState(self, board, player, action):
         # if player takes action on board, return next (board,player)
-        # convert action back to 3-position
-        pos = self.action_dict[action]
         # create board
         b = Board(self.n, self.supporting_dict, self.supported_dict)
         b.set_board(board)
@@ -63,7 +76,6 @@ class CubicupGame(Game):
         if action not in b.playable:
             raise NameError('Not a playable position')
         b.execute_move(action, player)
-        self.player = -player
         return (b.boards, -player)
 
     def getValidMoves(self, board, player):
@@ -107,6 +119,12 @@ class CubicupGame(Game):
     def getSymmetries(self, board, pi):
         # mirror, rotational
         # assert(len(pi) == self.n**2+1)  # 1 for pass
+        if sum(board) != 0:
+            board_rot1 = board[self.rotation1]
+            board_rot2 = board[self.rotation2]
+            pi_rot1 = np.array(pi)[self.rotation1].tolist()
+            pi_rot2 = np.array(pi)[self.rotation2].tolist()
+            return [(board, pi), (board_rot1, pi_rot1), (board_rot2, pi_rot2)]
         # pi_board = np.reshape(pi[:-1], (self.n, self.n))
         # l = []
 
