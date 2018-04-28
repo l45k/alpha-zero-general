@@ -20,21 +20,23 @@ stones = np.zeros((n*(n+1)*(n+2)/6, ))
 #                     print counter
 #                     counter +=1
 
+game = Game(n)
 for i in range(N):
     player = -1
-    game = Game(4)
     board = game.getInitBoard()
     while 0 == game.getGameEnded(board, player):
         moves = game.getValidMoves(board, player)
         if moves.any():
             posible = np.where(moves == 1)[0]
             rand_choice = np.random.randint(len(posible))
-            b, player = game.getNextState(board, player, posible[rand_choice])
+            board, player = game.getNextState(board, player, posible[rand_choice])
         else:
             player = -player
     runs[i] = game.getGameDraw(board)
-    nums[i] = game.getScore(board, 1)
+    print board
+ #   nums[i] = game.getScore(board, 1)
+ #   if runs[i] != 1 : print(board[game.supported_dict[0]] , " _ " , sum(board[game.supported_dict[0]]) ," : ", runs[i])
 
 print 'done'
-print sum(nums)
+#print sum(nums)
 print sum(runs)

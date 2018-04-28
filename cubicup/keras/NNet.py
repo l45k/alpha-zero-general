@@ -13,7 +13,7 @@ args = dotdict({
     'dropout': 0.3,
     'epochs': 10,
     'batch_size': 64,
-    'cuda': True,
+    'cuda': False,
     'num_channels': 512,
 })
 
@@ -21,7 +21,7 @@ args = dotdict({
 class NNetWrapper(NeuralNet):
     def __init__(self, game):
         self.nnet = cunet(game, args)
-        self.board_x, self.board_y, self.board_z = game.getBoardSize()
+        self.board_x = game.getBoardSize()
         self.action_size = game.getActionSize()
 
     def train(self, examples):
@@ -45,7 +45,7 @@ class NNetWrapper(NeuralNet):
         start = time.time()
 
         # preparing input
-        board = board[np.newaxis, :, :]
+        board = board[np.newaxis, :]#, :]
 
         # run
         pi, v = self.nnet.model.predict(board)
