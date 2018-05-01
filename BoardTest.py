@@ -44,11 +44,9 @@ func = partial(play_game, game)
 for i in pool.imap(func, range(N)):
     print i
 
-
-
-#    print board
- #   nums[i] = game.getScore(board, 1)
- #   if runs[i] != 1 : print(board[game.supported_dict[0]] , " _ " , sum(board[game.supported_dict[0]]) ," : ", runs[i])
+# print board
+# nums[i] = game.getScore(board, 1)
+# if runs[i] != 1 : print(board[game.supported_dict[0]] , " _ " , sum(board[game.supported_dict[0]]) ," : ", runs[i])
 
 print 'done'
 #print sum(nums)

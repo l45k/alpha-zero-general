@@ -97,7 +97,7 @@ class CubicupGame(Game):
         if self.getGameDraw(board):
             # fill board for debug TODO remove for run
             # board[0] = np.sign(self.getScore(board, player))
-            return -1
+            return -2
         # check 1 has moves
         if not b.get_legal_moves(1) or not b.get_legal_moves(-1):
             # normal end?
