@@ -1,7 +1,6 @@
 from __future__ import print_function
 import sys
 
-from six import b
 
 from Game import Game
 from cubicup.CubicupLogic import Board
@@ -155,6 +154,6 @@ class CubicupGame(Game):
                 for b in range(i + 1):
                     for c in range(i + 1):
                         if a + b + c == i:
-                            print(str((a, b, c)) + ": " + str(board[a, b, c]))
+                            print(str((a, b, c)) + ": " + str(board[self.pos_dict[(a, b, c)]]))
 
         print("--------------end-------------")
