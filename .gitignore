@@ -8,4 +8,5 @@
 /connect4/
 /gobang/
 /othello/
-tictactoe/
+tictactoe/*.md
+tictactoe/*.py

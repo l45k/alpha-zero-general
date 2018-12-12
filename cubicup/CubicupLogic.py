@@ -25,7 +25,7 @@ class Board:
         self.supported_dict = supported_dict
 
         # Create the empty board array.
-        self.boards = np.zeros((self.moves_pp * 2,), dtype=int)
+        self.boards = np.zeros((int(self.moves_pp) * 2,), dtype=int)
         self.playable = self.get_playable()
 
     # add [][] indexer syntax to the Board

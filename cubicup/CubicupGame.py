@@ -64,7 +64,7 @@ class CubicupGame(Game):
 
     def getActionSize(self):
         # return number of actions
-        return self.n * (self.n + 1) * (self.n + 2) / 6
+        return int(self.n * (self.n + 1) * (self.n + 2) / 6)
 
     def getNextState(self, board, player, action):
         # if player takes action on board, return next (board,player)
