@@ -4,9 +4,10 @@
 /temp/
 /.project
 /.pydevproject
-/tictactoe/
-/connect4/
-/gobang/
-/othello/
+tictactoe/
+connect4/
+gobang/
+othello/
 tictactoe/*.md
 tictactoe/*.py
+venv/

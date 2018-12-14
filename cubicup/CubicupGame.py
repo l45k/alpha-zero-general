@@ -1,7 +1,5 @@
 from __future__ import print_function
 import sys
-
-
 from Game import Game
 from cubicup.CubicupLogic import Board
 import numpy as np
@@ -75,7 +73,7 @@ class CubicupGame(Game):
         if action not in b.playable:
             raise NameError('Not a playable position')
         b.execute_move(action, player)
-        return (b.boards, -player)
+        return b.boards, -player
 
     def getValidMoves(self, board, player):
         # return a fixed size binary vector

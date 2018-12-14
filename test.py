@@ -4,7 +4,7 @@ from MCTS import MCTS
 import numpy as np
 from Coach import Coach
 from cubicup.CubicupGame import CubicupGame as Game
-from cubicup.keras.NNet import NNetWrapper as nn
+from cubicup.tensorflow.NNet import NNetWrapper as nn
 from utils import *
 
 args = dotdict({
@@ -38,7 +38,7 @@ player = 1
 
 while g.getGameEnded(board, player) == 0:
     mcts = MCTS(g, nnet, args)
-    action = mcts.getActionProb(g.getCanonicalForm(board,1))
+    action = mcts.get_action_prob(g.getCanonicalForm(board, 1))
     print(action)
     board , player = g.getNextState(board, 1, np.argmax(action))
     g.display(board)
